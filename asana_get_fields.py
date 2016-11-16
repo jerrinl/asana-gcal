@@ -10,12 +10,6 @@ from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
-
-
-def main():
-
-	validated_session = validate_asana_session()
-	
 		
 
 def validate_asana_session():
@@ -31,14 +25,34 @@ def validate_asana_session():
 			# useful for command line scripts and other non-web apps
 			redirect_uri='urn:ietf:wg:oauth:2.0:oob'
 		)
-		print_("authorized=".client.session.authorized)
 		
-		(url, state) = client.session.authorization_url()
+		return client
+	else: 
+		raise Exception("Could not establish Asana Oauth connection."
 		
-		try:
-			import webbrowser
-			webbrowser.open(url)
-		except Exception as e:
-			print_("Open the following URL in a browser to authorize:")
-			print_(url)
-			
+		
+
+def get_task_data(client):
+	"""
+	Gets Custom Field data from a task.
+	
+	args: 
+		client - authorized session for Asana account
+	return:
+		task_data - tuple of time and description
+	"""
+	me = client.users.me()
+	print "Hello " + me['name']
+	
+	workspace_id = me['workspaces'][0]['id]
+	
+	proj_custom_fields = client.custom_fields.
+	
+	
+		
+def main():
+	
+	if validate_asana_session()
+	 
+	 
+	
