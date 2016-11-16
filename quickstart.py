@@ -18,7 +18,7 @@ except ImportError:
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/calendar-python-quickstart.json
-SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
+SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 
@@ -48,6 +48,36 @@ def get_credentials():
         print('Storing credentials to ' + credential_path)
     return credentials
 
+	
+def make_event(task):
+	"""Puts an event into calendar based on start and end time.
+	
+	Generates an event object (like a JSON object?)
+	Need to consider parsing start time and body etc.
+	"""
+	
+	
+	
+	newEvent = {
+	'summary' : taskDescription,
+	'start' : {
+		'dateTime' : task_start_time,
+		'timeZone' : 'America/San Francisco',
+		},
+	'end' : {
+		'dateTime' : task_end_time,
+		'timeZone' : 'America/San Francisco',
+		},
+	}
+	
+	newEvent = service.events().insert(calendarID='primary', body=event).execute()
+	print 'Event created: %s' % (event.get('htmlLink'))
+	
+	
+	
+
+
+	
 def main():
     """Shows basic usage of the Google Calendar API.
 
