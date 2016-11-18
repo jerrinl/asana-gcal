@@ -1,4 +1,4 @@
-
+ 
 from __future__ import print_function
 import httplib2
 import os
@@ -61,11 +61,11 @@ def make_event(task):
 	newEvent = {
 	'summary' : taskDescription,
 	'start' : {
-		'dateTime' : task_start_time,
+		'dateTime' : task[task_start_time],
 		'timeZone' : 'America/San Francisco',
 		},
 	'end' : {
-		'dateTime' : task_end_time,
+		'dateTime' : task[task_end_time],
 		'timeZone' : 'America/San Francisco',
 		},
 	}
@@ -101,6 +101,7 @@ def main():
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
 
+    make_event(task)
 
 if __name__ == '__main__':
     main()

@@ -14,23 +14,28 @@ from oauth2client.file import Storage
 
 def validate_asana_session():
 	"""
-	Validates Asana access token. 
-	TODO: upload token to Github and have it used there instead of as environ variable
+	Validates Asana using a Personal Access Token
+	Creates a client wih Personal Access Client
+	TODO: Oauth setup instead
+
+	args:
+		none
+	return:
+		client; allows any sort of interface w/ Asana
 	"""
-	if 'ASANA_ACCESS_TOKEN' in os.environ:
-		client = asana.Client.oauth(
-			client_id=os.environ['ASANA_CLIENT_ID'],
-			client_secret=os.environ['ASANA_CLIENT_SECRET'],
-			# this special redirect URI will prompt the user to copy/paste the code.
-			# useful for command line scripts and other non-web apps
-			redirect_uri='urn:ietf:wg:oauth:2.0:oob'
-		)
-		
-		return client
-	else: 
-		raise Exception("Could not establish Asana Oauth connection."
-		
-		
+	client = asana.Client.access_token('0/7b5e3d4a15cc16050e3f29f31d2085fd')
+
+	return client
+	
+def get_user_project(client):
+	"""
+	Get user's project that we are looking for the custom fields in.
+	Naive implementation - just get the client and explicitly look for the Asana Inc org
+	followed by the project that literally says 'CF' 
+	"""
+	me = client.users.me()
+	user_workspaces = client.workspaces.
+
 
 def get_task_data(client):
 	"""
@@ -44,15 +49,14 @@ def get_task_data(client):
 	me = client.users.me()
 	print "Hello " + me['name']
 	
-	workspace_id = me['workspaces'][0]['id]
-	
-	proj_custom_fields = client.custom_fields.
+		
 	
 	
 		
 def main():
-	
-	if validate_asana_session()
+	client = validate_asana_session()
+	get_task_data(client)
+		 
 	 
-	 
-	
+if __name__ == '__main__':
+    main()
