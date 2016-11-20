@@ -1,21 +1,15 @@
 from __future__ import print_function
-import httplib2
 import os
 import sys 
+from six import print_
 import json
 import asana
 import datetime
 
-from apiclient import discovery
-from oauth2client import client
-from oauth2client import tools
-from oauth2client.file import Storage
-		
 
 def validate_asana_session():
 	"""
 	Validates Asana using a Personal Access Token
-	Creates a client wih Personal Access Client
 	TODO: Oauth setup instead
 
 	args:
@@ -23,40 +17,39 @@ def validate_asana_session():
 	return:
 		client; allows any sort of interface w/ Asana
 	"""
-	client = asana.Client.access_token('0/7b5e3d4a15cc16050e3f29f31d2085fd')
+	client = asana.Client.access_token(os.environ['ASANA_ACCESS_TOKEN'])
 
 	return client
 	
-def get_user_project(client):
+def get_user_project_fields(client):
 	"""
 	Get user's project that we are looking for the custom fields in.
 	Naive implementation - just get the client and explicitly look for the Asana Inc org
 	followed by the project that literally says 'CF' 
 	"""
-	me = client.users.me()
-	user_workspaces = client.workspaces.
+	
+	# projects = client.projects.find_all({'choice_workspace': workspace['id']})
+
+	user_fields = client.workspaces.workspace_id('15793206719').custom_fields
+
+	return user_fields
 
 
-def get_task_data(client):
-	"""
-	Gets Custom Field data from a task.
-	
-	args: 
-		client - authorized session for Asana account
-	return:
-		task_data - tuple of time and description
-	"""
-	me = client.users.me()
-	print "Hello " + me['name']
-	
-		
 	
 	
 		
 def main():
+
+	# PAT: '0/7b5e3d4a15cc16050e3f29f31d2085fd'
+	# workspace ID : 15793206719 // 'Asana, Inc'
+	# project ID: 215978128317963 // 
+	# task ID: 215978128317964
+
 	client = validate_asana_session()
-	get_task_data(client)
+	get_user_project_fields(client)
+	
+
 		 
 	 
 if __name__ == '__main__':
-    main()
+	main()
