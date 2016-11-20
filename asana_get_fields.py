@@ -17,7 +17,7 @@ def validate_asana_session():
 	return:
 		client; allows any sort of interface w/ Asana
 	"""
-	client = asana.Client.access_token(os.environ['ASANA_ACCESS_TOKEN'])
+	client = asana.Client.access_token('0/7b5e3d4a15cc16050e3f29f31d2085fd')
 
 	return client
 	
@@ -30,9 +30,9 @@ def get_user_project_fields(client):
 	
 	# projects = client.projects.find_all({'choice_workspace': workspace['id']})
 
-	user_fields = client.workspaces.workspace_id('15793206719').custom_fields
+	user_fields = client.custom_field_settings.find_by_project('215978128317963')
 
-	return user_fields
+	print(user_fields) 
 
 
 	
