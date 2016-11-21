@@ -28,7 +28,11 @@ def get_user_project_fields(client):
 	"""
 	
 	# projects = client.projects.find_all({'choice_workspace': workspace['id']})
-	fields_to_look_for = {'GCAL_START_TIME_HOUR':0,'GCAL_START_TIME_MIN':0,'GCAL_END_TIME_HOUR':0,'GCAL_END_TIME_MIN':0, 'GCAL_AM_OR_PM':0}
+	fields_to_look_for = {	'GCAL_START_TIME_HOUR':0,
+							'GCAL_START_TIME_MIN':0,
+							'GCAL_END_TIME_HOUR':0,
+							'GCAL_END_TIME_MIN':0, 
+							'GCAL_AM_OR_PM':0 }
 	user_fields = client.custom_field_settings.find_by_project('215978128317963') # TODO: replace this with...not-static value.
 
 	# print(user_fields)
@@ -71,18 +75,51 @@ def get_task_data(client,task_id_list): #keep
 
 	"""
 	for task_id in task_id_list:
-		raw_task = client.tasks.find_by_id(task_id)
-		print(raw_task["custom_fields"])
+		raw_task = client.tasks.find_by_id(task_id) # iterate through each task in proj, then through each field
+		cf_appender(raw_task)
 
 def cf_appender(raw_task_data):
 	"""
 	returns a better formatted thing from a task
 	"""
+	eventData = {	'GCAL_START_TIME_HOUR':0,
+					'GCAL_START_TIME_MIN':0,
+					'GCAL_END_TIME_HOUR':0,
+					'GCAL_END_TIME_MIN':0, 
+					'GCAL_AM_OR_PM':''}
 
-def make_gcal_event(task):
+	for x in raw_task_data["custom_fields"]:
+		if x["name"] in eventData:
+			eventData[x["name"]] = x["enum_value"]["name"]
+
+	start_time = eventData["GCAL_START_TIME_HOUR"] + eventData["GCAL_START_TIME_MIN"] + eventData["GCAL_AM_OR_PM"]
+	end_time = eventData["GCAL_END_TIME_HOUR"] + eventData["GCAL_END_TIME_MIN"] + eventData["GCAL_AM_OR_PM"]
+
+	print(start_time + "-" + end_time)
+	return (start_time, end_time)
+def make_gcal_event(refined_task):
 	"""
 	TODO: given all event metadata turn it into a google calendar event
 	"""
+
+class AsanaCalendarTask:
+	eventData = {	'GCAL_START_TIME_HOUR':0,
+					'GCAL_START_TIME_MIN':0,
+					'GCAL_END_TIME_HOUR':0,
+					'GCAL_END_TIME_MIN':0, 
+					'GCAL_AM_OR_PM':0, 
+					'EVENT_DESC':''}
+
+	def getData():
+		return eventData
+
+	def resetData():
+		for x in eventData:
+			if x != 'EVENT_DESC':
+				x = 0
+			else:
+				x = ''
+
 
 		
 def main():
@@ -91,6 +128,7 @@ def main():
 	# workspace ID : 15793206719 // 'Asana, Inc'
 	# project ID: 215978128317963 // 
 	# task ID: 215978128317964
+
 	project_id = '215978128317963'
 	client = validate_asana_session()
 
