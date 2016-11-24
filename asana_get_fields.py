@@ -17,7 +17,7 @@ def validate_asana_session():
 	return:
 		client; allows any sort of interface w/ Asana
 	"""
-	client = asana.Client.access_token('0/7b5e3d4a15cc16050e3f29f31d2085fd') 
+	client = asana.Client.access_token() 
 
 	return client #keep
 	
@@ -76,9 +76,9 @@ def get_task_data(client,task_id_list): #keep
 	"""
 	for task_id in task_id_list:
 		raw_task = client.tasks.find_by_id(task_id) # iterate through each task in proj, then through each field
-		cf_appender(raw_task)
+		cf_appender_us(raw_task)
 
-def cf_appender(raw_task_data):
+def cf_appender_us(raw_task_data):
 	"""
 	returns a better formatted thing from a task
 	"""
@@ -95,8 +95,7 @@ def cf_appender(raw_task_data):
 	start_time = eventData["GCAL_START_TIME_HOUR"] + eventData["GCAL_START_TIME_MIN"] + eventData["GCAL_AM_OR_PM"]
 	end_time = eventData["GCAL_END_TIME_HOUR"] + eventData["GCAL_END_TIME_MIN"] + eventData["GCAL_AM_OR_PM"]
 
-	print(start_time + "-" + end_time)
-	return (start_time, end_time)
+	
 def make_gcal_event(refined_task):
 	"""
 	TODO: given all event metadata turn it into a google calendar event
@@ -124,7 +123,6 @@ class AsanaCalendarTask:
 		
 def main():
 
-	# PAT: '0/7b5e3d4a15cc16050e3f29f31d2085fd'
 	# workspace ID : 15793206719 // 'Asana, Inc'
 	# project ID: 215978128317963 // 
 	# task ID: 215978128317964
